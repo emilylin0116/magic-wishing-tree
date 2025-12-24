@@ -42,7 +42,13 @@ export default function App() {
       {/* 3D Canvas */}
       <Canvas
         camera={{ position: [0, 6, 18], fov: 40 }}
-        gl={{ antialias: false, stencil: false, depth: true, alpha: true }}
+        gl={{ 
+          antialias: false, 
+          stencil: false, 
+          depth: true, 
+          alpha: true,
+          powerPreference: "high-performance" 
+        }}
         dpr={1}
       >
         <Suspense fallback={null}>
@@ -56,13 +62,13 @@ export default function App() {
           
           <EffectComposer disableNormalPass>
             <Bloom 
-              luminanceThreshold={0.2} 
+              luminanceThreshold={0.15} 
               mipmapBlur 
-              intensity={2.8} 
-              radius={0.7} 
+              intensity={bursting ? 5.0 : 2.5} 
+              radius={0.8} 
             />
-            <Noise opacity={0.04} />
-            <Vignette eskil={false} offset={0.05} darkness={1.2} />
+            <Noise opacity={0.03} />
+            <Vignette eskil={false} offset={0.05} darkness={1.1} />
           </EffectComposer>
         </Suspense>
 
@@ -74,9 +80,9 @@ export default function App() {
           autoRotate={!bursting && !showPunchline && !wish}
           autoRotateSpeed={0.5}
           enableDamping={true}
+          dampingFactor={0.03} 
         />
         
-        {/* Slightly lower ambient intensity for higher contrast */}
         <ambientLight intensity={0.5} color="#f8d5ff" />
         <pointLight position={[10, 10, 10]} intensity={3.5} color="#ff22aa" />
         <pointLight position={[-10, 5, -10]} intensity={2.5} color="#44ffcc" />
