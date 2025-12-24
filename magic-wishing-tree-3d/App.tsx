@@ -43,7 +43,7 @@ export default function App() {
       <Canvas
         camera={{ position: [0, 6, 18], fov: 40 }}
         gl={{ antialias: false, stencil: false, depth: true, alpha: true }}
-        dpr={[1, 2]}
+        dpr={1}
       >
         <Suspense fallback={null}>
           <Scene 
