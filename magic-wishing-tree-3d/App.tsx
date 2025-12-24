@@ -1,4 +1,3 @@
-
 import React, { useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Bloom, EffectComposer, Vignette, Noise } from '@react-three/postprocessing';
@@ -7,6 +6,18 @@ import Scene from './components/Scene';
 import { UIOverlay } from './components/UIOverlay';
 import HandProcessor from './components/HandProcessor';
 import { HandData } from './types';
+
+// 強制注入全域樣式，徹底解決文字黑屏問題
+const GlobalStyle = () => (
+  <style dangerouslySetInnerHTML={{ __html: `
+    .force-white * {
+      color: white !important;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.4) !important;
+    }
+    input::placeholder { color: rgba(255, 255, 255, 0.4) !important; }
+    input { color: white !important; }
+  `}} />
+);
 
 export default function App() {
   const [wish, setWish] = useState('');
@@ -17,10 +28,8 @@ export default function App() {
 
   const handleWishSubmit = (text: string) => {
     setWish(text);
-    // Sequence starts: wishing particles reach core then burst
     setTimeout(() => {
       setBursting(true);
-      // Burst completes after spiral + dash
       setTimeout(() => {
         setShowPunchline(true);
       }, 4500);
@@ -36,10 +45,12 @@ export default function App() {
 
   return (
     <div 
-      className="w-full h-screen relative overflow-hidden font-sans" 
+      className="w-full h-screen relative overflow-hidden font-sans force-white" 
       style={{ background: 'linear-gradient(to bottom, #0A000A, #150015)' }}
     >
-      {/* 3D Canvas */}
+      <GlobalStyle />
+
+      {/* 3D Canvas - 電流平滑縮放版 */}
       <Canvas
         camera={{ position: [0, 6, 18], fov: 40 }}
         gl={{ 
@@ -80,7 +91,7 @@ export default function App() {
           autoRotate={!bursting && !showPunchline && !wish}
           autoRotateSpeed={0.5}
           enableDamping={true}
-          dampingFactor={0.03} 
+          dampingFactor={0.03} // 這裡是絲滑感的關鍵
         />
         
         <ambientLight intensity={0.5} color="#f8d5ff" />
@@ -97,8 +108,8 @@ export default function App() {
         showPunchline={showPunchline}
       />
 
-      {/* Hand Gesture Radar */}
-      <div className="absolute bottom-6 right-6 w-40 h-28 border border-white/10 rounded-3xl overflow-hidden bg-black/50 backdrop-blur-xl shadow-2xl pointer-events-none">
+      {/* Hand Gesture Radar - 加強背景對比 */}
+      <div className="absolute bottom-6 right-6 w-40 h-28 border border-white/20 rounded-3xl overflow-hidden bg-black/70 backdrop-blur-xl shadow-2xl pointer-events-none">
          <HandProcessor onHandUpdate={setHandData} />
       </div>
 
