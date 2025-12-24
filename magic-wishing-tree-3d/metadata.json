@@ -1,0 +1,8 @@
+
+{
+  "name": "Magic Wishing Tree 3D",
+  "description": "An interactive 3D Magic Wishing Tree featuring instanced geometry, text-to-particle animations, hand gesture control, and a humorous Christmas surprise.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
